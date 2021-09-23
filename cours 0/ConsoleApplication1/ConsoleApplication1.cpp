@@ -72,36 +72,42 @@ struct Vec4 {
 		return res;
 	};
 
-	/*
-	 //Vec toto;
-	Vec4 a;
-	Vec4 b;
-
-	a.x = 16;
-	b.y = 17;
-	a.z = b.z = 8;
-	b.w = -16;
-
-	Vec4 res = a.add(b);
-	printf("%f %f %f", res.x,res.y,res.z);
-
-	res.incr(b);
-	res.incr(18);
-	Vec4 resDiv = res.div(2);
-
-	*/
 };
+
+
+int Strlen(const char* maChaine) {
+	int res = 0;
+	//parcourir la chaine
+	while (maChaine[res] != 0) {
+		res++;
+	}
+	return res;
+}
+
+int Strlen2(const char* maChaine) {
+	const char* cursor = maChaine;
+	while (*cursor) cursor++;
+	return cursor - maChaine;
+}
+
+int Countc(const char* maChaine, char c) {
+	int sizeOfString = strlen(maChaine);
+	int res = 0;//compte de characters
+
+	for (int i = 0; i < sizeOfString; i++) 
+		if ( maChaine[i] == c)
+			res++;	
+	return res;
+}
 
 int main()
 {
-	IntArray bob;
-	for (int i = 0; i < 16; i++) {
-		bob.set(i, i * i);
-	}
-	for (int i = 0; i < 16; i++) {
-		printf("%d ", bob.get(i));
-	}
-	printf("\n");
+	int nbD = Strlen2("");
+	int nbC = Strlen2("sapin");
+	int nbB = Strlen("sapin");
+	int nbA = Countc("sapin", 'a');
+
+	printf("nombre de a:%d", nbA);
 
     return 0;
 }
