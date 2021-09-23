@@ -140,8 +140,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
+    <ClCompile Include="IntArray.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="IntArray.hpp" />
     <ClInclude Include="Toto.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

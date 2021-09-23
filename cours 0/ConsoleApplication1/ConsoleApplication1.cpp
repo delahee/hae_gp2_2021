@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include "Toto.h"
+#include "IntArray.hpp"
 
 void  main0()
 {
@@ -70,25 +71,37 @@ struct Vec4 {
 		res.w = w / f;
 		return res;
 	};
+
+	/*
+	 //Vec toto;
+	Vec4 a;
+	Vec4 b;
+
+	a.x = 16;
+	b.y = 17;
+	a.z = b.z = 8;
+	b.w = -16;
+
+	Vec4 res = a.add(b);
+	printf("%f %f %f", res.x,res.y,res.z);
+
+	res.incr(b);
+	res.incr(18);
+	Vec4 resDiv = res.div(2);
+
+	*/
 };
 
 int main()
 {
-    //Vec toto;
-    Vec4 a;
-    Vec4 b;
-
-    a.x = 16;
-    b.y = 17;
-    a.z = b.z = 8;
-    b.w = -16;
-
-    Vec4 res = a.add(b);
-    printf("%f %f %f", res.x,res.y,res.z);
-
-    res.incr(b);
-    res.incr(18);
-    Vec4 resDiv = res.div(2);
+	IntArray bob;
+	for (int i = 0; i < 16; i++) {
+		bob.set(i, i * i);
+	}
+	for (int i = 0; i < 16; i++) {
+		printf("%d ", bob.get(i));
+	}
+	printf("\n");
 
     return 0;
 }
