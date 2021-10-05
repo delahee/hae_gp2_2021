@@ -136,9 +136,8 @@ void StrNCpy(char* dst, int nb, const char* src) {
 int main()
 {
 	IntArray toto(4);
-	for (int i = 0; i < 4; ++i) {
-		toto.set(i, i);
-	}
-	toto.insertAtMove(0, 5);
+	for (int i = 0; i < 4; ++i) 
+		toto.set(i, 2*i);
+	toto.insert(3);
     return 0;
 }

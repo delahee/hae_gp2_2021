@@ -38,13 +38,11 @@ void IntArray::resize(int newSize) {
 	//délivrer la memoire si besoin
 }
 
-void IntArray::insert(int value)
-{
-	//find the rightful index
-
-	//insert at pos
-	//insertAt(idx, value);
-
+void IntArray::insert(int value){
+	int idx = 0;
+	while( (idx < size) && (data[idx] < value)) 
+		idx++;
+	insertAt(idx, value);
 }
 
 void IntArray::insertAt(int idx, int value){
