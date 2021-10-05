@@ -137,7 +137,7 @@ int main()
 {
 	IntArray toto(4);
 	for (int i = 0; i < 4; ++i) 
-		toto.set(i, 2*i);
-	toto.insert(3);
+		toto.set(i, -2*i);
+	toto.qsort();
     return 0;
 }

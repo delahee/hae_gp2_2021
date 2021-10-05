@@ -1,5 +1,6 @@
 #include "IntArray.hpp"
 #include <utility>
+#include <cstdlib>
 
 void IntArray::set(int idx, int value) {
 	//si idx est hors des bornes du tableau 
@@ -51,6 +52,14 @@ void IntArray::insertAt(int idx, int value){
 	for ( ; sz > idx; sz--)
 		data[sz] = data[sz-1];
 	data[idx] = value;
+}
+
+static int cmp(const void * v0, const void * v1) {
+	return *(int*)v1 - *(int*)v0;
+}
+
+void IntArray::qsort() {
+	::qsort(data, size, sizeof(int), cmp);
 }
 
 void IntArray::insertAtMove(int idx, int value) {
