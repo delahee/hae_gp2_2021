@@ -1,4 +1,5 @@
 #include "IntArray.hpp"
+#include <utility>
 
 void IntArray::set(int idx, int value) {
 	//si idx est hors des bornes du tableau 
@@ -18,16 +19,11 @@ void IntArray::resize(int newSize) {
 #ifdef MALLOC_VERSION
 	data = (int*)realloc(data, newSize * sizeof(int));
 	memset(data + size, 0, (newSize - size) * sizeof(int));
-	//for (int i = size; i < newSize; i++) 
-	//	data[i] = 0;
 	size = newSize;
 #else
 	int* ndata = new int[newSize];
-	//memcpy(ndata, data, size * sizeof(int));
-	for (int i = 0; i < size; i++)
-		ndata[i] = data[i];
-	for (int i = size; i < newSize; i++)
-		ndata[i] = 0;
+	memset(ndata, 0, newSize * sizeof(int));
+	memcpy(ndata, data, size * sizeof(int));
 	int* oldData = data;
 	this->data = ndata;
 	delete oldData;
@@ -40,4 +36,29 @@ void IntArray::resize(int newSize) {
 	// sot en new... reallou un tableau et copier la partie restante
 
 	//délivrer la memoire si besoin
-};
+}
+
+void IntArray::insert(int value)
+{
+	//find the rightful index
+
+	//insert at pos
+	//insertAt(idx, value);
+
+}
+
+void IntArray::insertAt(int idx, int value){
+	int sz = size;
+	resize(std::max<int>(idx+1, size + 1));
+	for ( ; sz > idx; sz--)
+		data[sz] = data[sz-1];
+	data[idx] = value;
+}
+
+void IntArray::insertAtMove(int idx, int value) {
+	int sz = size;
+	resize(std::max<int>(idx + 1, size + 1));
+	memmove(&data[idx+1], &data[idx], (sz - idx) * sizeof(int));
+	data[idx] = value;
+}
+

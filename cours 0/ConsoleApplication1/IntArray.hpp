@@ -24,11 +24,11 @@ public:
 #endif
 	};
 
-	IntArray(int size) {
+	IntArray(int _size) {
 #ifdef MALLOC_VERSION
 		data = (int*)malloc(size * sizeof(int));
 #else
-		data = new int[size = 65535];
+		data = new int[size = _size];
 #endif
 		memset(data, 0, size * sizeof(int));
 		this->size = size;
@@ -45,7 +45,9 @@ public:
 	void set(int idx, int value);
 
 	void resize(int newSize);
-	//void insert( int idx, int value )
+	void insert(int value);
+	void insertAt(int idx,int value);
+	void insertAtMove(int idx,int value);
 
 	int get(int idx) {
 		//si idx est hors des bornes du tableau 
