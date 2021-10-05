@@ -135,11 +135,8 @@ void StrNCpy(char* dst, int nb, const char* src) {
 
 int main()
 {
-	char chaine[250] = {};
-	//StrCpyFast(chaine, "sac a a sapin");
-	StrNCpy(chaine, 3, "sac a a sapin");
-	StrNCpy(chaine, 160, "sac a a sapin");
-	StrNCpy(chaine, 8, "sac a a sapin");
-	StrNCpy(chaine, 0, "sac a a sapin");
+	IntArray toto(16);
+	toto.resize(18);
+	toto.set(17, 66);
     return 0;
 }
