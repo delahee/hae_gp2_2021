@@ -3,7 +3,7 @@
 #include "Toto.h"
 #include "IntArray.hpp"
 
-void  main0()
+void main0()
 {
     printf("0\n");
     int zero = 0;
@@ -100,14 +100,46 @@ int Countc(const char* maChaine, char c) {
 	return res;
 }
 
+void StrCpy(char* dst, const char* src) {
+	int NbOfChar;
+	NbOfChar = Strlen(src);
+	for (int i = 0; i < NbOfChar; i++)
+	{
+		dst[i] = src[i];
+	}
+	dst[NbOfChar] = 0;
+}
+
+void StrCpyFast(char* dst, const char* src) {
+	while (*src /*!= 0*/ ) {
+		*dst = *src;
+		dst++;
+		src++;
+	}
+	*dst = 0;
+}
+
+void StrNCpyULTRA_UNREADABLE(char* dst, int nb, const char* src) {
+	while (nb-- && (*dst++ = *src++));
+	*dst = 0;
+}
+
+void StrNCpy(char* dst, int nb, const char* src) {
+	while( nb-- && *src) {
+		*dst = *src;
+		dst++;
+		src++;
+	}
+	*dst = 0;
+}
+
 int main()
 {
-	int nbD = Strlen2("");
-	int nbC = Strlen2("sapin");
-	int nbB = Strlen("sapin");
-	int nbA = Countc("sapin", 'a');
-
-	printf("nombre de a:%d", nbA);
-
+	char chaine[250] = {};
+	//StrCpyFast(chaine, "sac a a sapin");
+	StrNCpy(chaine, 3, "sac a a sapin");
+	StrNCpy(chaine, 160, "sac a a sapin");
+	StrNCpy(chaine, 8, "sac a a sapin");
+	StrNCpy(chaine, 0, "sac a a sapin");
     return 0;
 }
