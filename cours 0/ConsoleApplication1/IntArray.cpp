@@ -55,7 +55,7 @@ void IntArray::insertAt(int idx, int value){
 }
 
 static int cmp(const void * v0, const void * v1) {
-	return *(int*)v1 - *(int*)v0;
+	return *(int*)v0 - *(int*)v1;
 }
 
 void IntArray::qsort() {
