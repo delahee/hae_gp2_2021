@@ -141,9 +141,13 @@
   <ItemGroup>
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="IntArray.cpp" />
+    <ClCompile Include="IntList.cpp" />
+    <ClCompile Include="IntTree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IntArray.hpp" />
+    <ClInclude Include="IntList.hpp" />
+    <ClInclude Include="IntTree.hpp" />
     <ClInclude Include="Toto.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

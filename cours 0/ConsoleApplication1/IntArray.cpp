@@ -1,7 +1,8 @@
 #include "IntArray.hpp"
 #include <utility>
 #include <cstdlib>
-
+#undef max
+#undef min
 void IntArray::set(int idx, int value) {
 	//si idx est hors des bornes du tableau 
 	//faire throw "exception:out of bounds";
@@ -47,8 +48,12 @@ void IntArray::insert(int value){
 }
 
 void IntArray::insertAt(int idx, int value){
+	using namespace std;
+
 	int sz = size;
-	resize(std::max<int>(idx+1, size + 1));
+	resize(max(idx+1, size + 1));
+	//resize(max(idx + 1, size + 1));
+
 	for ( ; sz > idx; sz--)
 		data[sz] = data[sz-1];
 	data[idx] = value;

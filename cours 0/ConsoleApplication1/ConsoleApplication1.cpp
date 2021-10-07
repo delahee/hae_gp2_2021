@@ -2,6 +2,8 @@
 #include <iostream>
 #include "Toto.h"
 #include "IntArray.hpp"
+#include "IntList.hpp"
+#include "IntTree.hpp"
 
 void main0()
 {
@@ -135,9 +137,60 @@ void StrNCpy(char* dst, int nb, const char* src) {
 
 int main()
 {
+	/*
 	IntArray toto(4);
 	for (int i = 0; i < 4; ++i) 
 		toto.set(i, -2*i);
+	toto.insert( -20);
 	toto.qsort();
-    return 0;
+    */
+	/*
+	//IntList * tata = new IntList();
+	IntList * tata = (IntList*)malloc(sizeof(IntList));
+	tata->value = 70;
+	tata->next = nullptr;
+
+	// ou utiliser placement new en c++
+	//new (tata) IntList();
+	
+	if (length(tata) != 1) throw "alarm?";
+	if (length(0) != 0) throw "alarm?";
+
+	tata = appendFirst(tata,66);
+	
+	IntList* t0 = appendLast(nullptr,77);
+	IntList* t1 = appendLast(t0,78);
+	IntList* t2 = appendLast(t1,79);
+	t2 = appendLast(t2,80);
+	t2 = appendLast(t2,81);
+	t2 = appendLast(t2,82);
+
+	t2 = remove(t2, 77);
+	t2 = remove(t2, 79);
+
+	auto t3 = remove(nullptr, 79);
+	auto t4 = remove(t2, 666);
+	*/
+	IntTree* toto = create(66);
+
+	if (count(0) != 0) throw "alarm?";
+	if (count(toto) != 1) throw "alarm?";
+
+	IntTree* h = insert(nullptr, 70);
+	h = insert(h, 66);
+	h = insert(h, 75);
+	h = insert(h, 79);
+
+	IntTree* z = insert(nullptr, 1);
+	z = insert(z, -5);
+	z = insert(z, 5);
+	z = insert(z, 6);
+	z = insert(z, 15);
+
+	IntTree* zh = merge(z, h);
+
+	IntTree* zr = remove(zh, 1);
+	zr = remove(zr, -5);
+
+	return 0;
 }
