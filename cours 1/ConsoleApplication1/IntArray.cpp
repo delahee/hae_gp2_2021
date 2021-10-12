@@ -129,8 +129,16 @@ double IntArray::sumCapture() {
 	return res;
 }
 
+
 IntArray* IntArray::fromArray(int* data, int len)
 {
-	return nullptr;
+	//allouer un nouveau IntArray*
+	IntArray* copy = new IntArray(len);
+
+	// copier les données dans la nouvelle instance
+	memcpy(copy->data, data, len * sizeof(int));
+
+	//renvoyer cette copie
+	return copy;
 }
 
