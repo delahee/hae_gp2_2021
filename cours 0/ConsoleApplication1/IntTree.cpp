@@ -12,6 +12,12 @@ int count(IntTree* head){
 	return 1 + count(head->fg) + count(head->fd);
 }
 
+
+// prouve P(0)
+// prouve qu'il existe P(n+1) = Y(Pn)
+// => implique que ca se termine correctement et que ca fait ce qu'on veut
+
+
 IntTree* insert(IntTree* head, int value){
 	if (!head) return create(value);
 	if (value < head->value) 
