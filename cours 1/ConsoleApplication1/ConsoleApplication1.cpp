@@ -100,7 +100,7 @@ int divInt(int a, int b) // avec des soustractions utiliser une fonction interm√
     return 1 + divInt( sub(a,b), b);
 }
 
-int mod(int a, int b); // reste de la division
+int modulo(int a, int b); // reste de la division
 
 int len(int vecX, int vecY); // avec les fonctions prec√©dentes
 
