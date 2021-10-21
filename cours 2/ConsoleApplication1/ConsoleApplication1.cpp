@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include "Int64Array.hpp"
+#include "Tool.hpp"
 
 int StrLen(const char* str) {
 	if (str == nullptr) return 0;
@@ -110,9 +111,6 @@ int mainStr(){
 
 int main() {
 	Int64Array arr(4);
-	for (int i = 0; i < 64; ++i) {
-		//printf();
-	}
 	arr.ensure(8);
 
 	Int64Array s;
@@ -126,5 +124,65 @@ int main() {
 	for (int i = 0; i < 4; ++i)
 		t[i] = i * i;
 
+	Int64Array ti;
+	ti.insert(0, 1);
+	ti.insert(0, 2);
+	ti.insert(0, 3);
+	ti.insert(0, 4);
+	ti.insert(0, 5);
+
+	Int64Array ti1;
+	ti1.insert(0, 1);
+	ti1.insert(0, 2);
+	ti1.insert(0, 3);
+	ti1.insert(2, 5);
+	ti1.insert(1, 6);
+	ti1.insert(0, 7);
+
+	Int64Array ti2;
+	ti2.insert_ordered(666);
+	ti2.insert_ordered(66);
+	ti2.insert_ordered(6);
+	ti2.insert_ordered(6666);
+	ti2.insert_ordered(5);
+	ti2.insert_ordered(10);
+
+
+	int64_t tt[] = {448668,48,64,46,486,846,46,1646,16};
+	int sz = sizeof(tt) / sizeof(int64_t);
+	Int64Array ti3;
+	ti3.append_sorted(tt,sz);
+
+	Int64Array ti4;
+	ti4.load(tt,8);
+
+	Int64Array ti5;
+	ti5.insertionSort(tt, sz);
+
+	srand(0);
+	Int64Array ti6;
+
+	{
+		double t0 = getTimeStamp();
+		for (int i = 0; i < 10000; ++i) {
+			ti6.push_back(rand() % 11353453);
+		}
+		double t1 = getTimeStamp();
+		printf("time elapsed %llf s\n", (t1 - t0));
+	}
+	{
+		double t0 = getTimeStamp();
+		Int64Array tiAppend;
+		tiAppend.append_sorted(ti6.data, ti6.curSize);
+		double t1 = getTimeStamp();
+		printf("time elapsed tappend %llf s\n", (t1 - t0));
+	}
+	{
+		double t0 = getTimeStamp();
+		Int64Array tiSort;
+		tiSort.insertionSort(ti6.data, ti6.curSize);
+		double t1 = getTimeStamp();
+		printf("time elapsed tsort %llf s\n", (t1 - t0));
+	}
 	return 0;
 }
