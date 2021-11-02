@@ -1,26 +1,27 @@
 #pragma once
 
+template<typename Type>
 class List {
 public:
-	double  val = 0.0;
+	Type	val = {};
 	List*	next = nullptr;
 
-	List(double elem) {
+	List(Type elem) {
 		val = elem;
 	}
 
-	List(double elem, List* _next ) {
+	List(Type elem, List* _next ) {
 		val = elem;
 		next = _next;
 	}
 
-	List* push_first(double nu_elem) {
+	List* push_first(Type nu_elem) {
 		auto l = new List(nu_elem);
 		l->next = this;
 		return l;
 	}
 
-	List* remove(double elem) {
+	List* remove(Type elem) {
 		if (val == elem) {
 			List* n = next;
 			delete this;
@@ -33,7 +34,7 @@ public:
 		}
 	};
 
-	List* push_back(double nu_elem) {
+	List* push_back(Type nu_elem) {
 		if (!next) {
 			next = new List(nu_elem);
 		}
