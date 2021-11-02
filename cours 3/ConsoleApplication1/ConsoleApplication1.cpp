@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include "Int64Array.hpp"
 #include "Tool.hpp"
+#include "List.hpp"
 
 int StrLen(const char* str) {
 	if (str == nullptr) return 0;
@@ -109,7 +110,7 @@ int mainStr(){
 	return 0;
 }
 
-int main() {
+int mainAlgo() {
 	Int64Array arr(4);
 	arr.ensure(8);
 
@@ -232,5 +233,15 @@ int main() {
 		printf("time elapsed for bsearch iter %llf s\n", (t1 - t0));
 	}
 
+	return 0;
+}
+
+int main() {
+
+	List* v0 = new List(66);
+	List* v1 = new List(67, v0);
+	List* v2 = v1->push_first(34);
+	List* v3 = v2->remove(34);
+	List* v4 = v3->push_back(34);
 	return 0;
 }
