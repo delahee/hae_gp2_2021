@@ -146,6 +146,7 @@
     <ClInclude Include="Int64Array.hpp" />
     <ClInclude Include="List.hpp" />
     <ClInclude Include="Tool.hpp" />
+    <ClInclude Include="Tree.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

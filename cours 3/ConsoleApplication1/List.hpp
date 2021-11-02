@@ -44,3 +44,6 @@ public:
 		return this;
 	}
 };
+
+template<typename Type>
+void bsearch(Type* arr, int size);

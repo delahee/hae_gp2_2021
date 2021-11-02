@@ -7,6 +7,7 @@
 #include "List.hpp"
 #include <algorithm>
 #include <vector>
+#include "Tree.hpp"
 
 int StrLen(const char* str) {
 	if (str == nullptr) return 0;
@@ -244,7 +245,7 @@ typedef List<int> ListI;
 typedef List<std::string> ListS;
 
 
-int main() {
+int mainList() {
 
 	ListD* v0 = new ListD(66.0);
 	auto v1 = new ListD(67, v0);
@@ -280,6 +281,27 @@ int main() {
 	}
 	printf("\n---------------\n");
 
+
+	return 0;
+}
+
+int main() {
+
+	Tree<float>* tf = new Tree<float>(66.0f);
+	tf->insert(33);
+	tf->insert(99);
+	tf->insert(16);
+	Tree<std::string>* ts = new Tree<std::string>("sapin");
+	ts->insert("lapin");
+	ts->insert("zapin");
+	ts->insert("capin");
+	ts->insert("vapin");
+	ts->insert("rapin");
+
+	ts = ts->remove("zapin");
+
+	auto lol = ts->search("lol");
+	auto vapin = ts->search("vapin");
 
 	return 0;
 }
