@@ -13,6 +13,7 @@
 #include <SFML/Main.hpp>
 #include <SFML/Window.hpp>
 #include "Curve.hpp"
+#include "Bullet.hpp"
 
 float catmull(float p0 , float p1 , float p2,float p3 , float t ) {
 	auto q = 2.0f * p1;
@@ -82,7 +83,7 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
 	window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(60);
+	//window.setFramerateLimit(60);
 	sf::RectangleShape shape(sf::Vector2f(25,60));
 	shape.setFillColor(sf::Color::Green);
 	shape.setPosition(800, 600);
@@ -108,6 +109,7 @@ int main()
 	double tEnterFrame = getTimeStamp();
 	double tExitFrame = getTimeStamp();
 
+	Bullet bullets;
 	bool mouseLeftWasPressed = false;
 	Curve c;
 	while (window.isOpen()){
@@ -145,11 +147,26 @@ int main()
 
 
 		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		bool mouseIsReleased = (mouseLeftIsPressed && !mouseLeftWasPressed);
+		bool mouseIsReleased = (!mouseLeftIsPressed && mouseLeftWasPressed);
 
 		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
-		if (mouseIsReleased) c.addPoint(mousePos);
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) c.clear();
+
+		if (false) {
+			if (mouseIsReleased) c.addPoint(mousePos);
+			if (sf::Mouse::isButtonPressed(sf::Mouse::Right)) c.clear();
+		}
+
+		if (mouseLeftIsPressed) {
+			auto pos = gun.getPosition();
+			auto dir = mousePos - pos;
+			float dirLen = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+			sf::Vector2f dxy(1, 0);
+			if (dirLen) {
+				dxy = dir / dirLen;
+			}
+			dxy *= 60.0f * 3;
+			bullets.create(pos.x, pos.y, dxy.x, dxy.y);
+		}
 
 		if (mouseLeftIsPressed) 
 			mouseLeftWasPressed = true;
@@ -169,10 +186,22 @@ int main()
 
 		ptr.setPosition(mousePos);
 		tDt.setString( to_string(dt)+" FPS:"+ to_string((int)(1.0f / dt)));
+		
+		////////////////////
+
+		//CLEAR
 		window.clear();
 		
+		////////////////////
+		//UPDATE
+		bullets.update(dt);
+
+		////////////////////
+		//DRAW
 		drawMountain(window);
 		drawGround(window);
+
+		bullets.draw(window);
 
 		//game elems
 		window.draw(shape);

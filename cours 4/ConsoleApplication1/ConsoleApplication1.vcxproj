@@ -150,10 +150,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="Int64Array.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="Int64Array.hpp" />
     <ClInclude Include="List.hpp" />
