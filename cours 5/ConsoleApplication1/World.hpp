@@ -4,8 +4,6 @@
 #include "SFML/Audio/Sound.hpp"
 #include "SFML/Audio/SoundBuffer.hpp"
 
-
-
 class Audio {
 public:
 	Audio();
@@ -15,6 +13,7 @@ public:
 	sf::Sound		goth;
 	sf::SoundBuffer gothBuffer;
 };
+
 class World {
 public:
 	Audio*					audio = nullptr;
@@ -23,5 +22,7 @@ public:
 	void update(double dt);
 	void draw(sf::RenderWindow& win);
 
+	void collideWallBall(Entity* wall, Entity* ball);
+	void collideBrickBall(Entity* wall, Entity* ball);
 };
 

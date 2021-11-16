@@ -140,6 +140,18 @@ int main(){
 	world.data.push_back(playerPad);
 	world.data.push_back(ball);
 
+	auto b = new sf::RectangleShape(sf::Vector2f(64, 24));
+	auto szB = b->getSize();
+	szB.x *= 0.5;
+	szB.y *= 0.5;
+	b->setOrigin(szB);
+	b->setFillColor(sf::Color::Red);
+	b->setOutlineColor(sf::Color::Green);
+	b->setOutlineThickness(2);
+	b->setPosition(sf::Vector2f(128, 128));
+	Entity* brick0 = new Entity(EType::Brick, b);
+	world.data.push_back(brick0);
+
 	playerPad->currentBall = ball;
 
 	Bullet bullets;
@@ -195,8 +207,12 @@ int main(){
 			}
 			dxy *= 60.0f * 6;
 			if (playerPad->currentBall) {
-				playerPad->currentBall->dx = dxy.x;
-				playerPad->currentBall->dy = dxy.y;
+				auto ball = playerPad->currentBall;
+				ball->dx = dxy.x;
+				ball->dy = dxy.y;
+				float push = 0.1;
+				
+				ball->setPosition( sf::Vector2f(ball->getPosition().x, playerPad->getPosition().y - 16));
 			}
 			playerPad->currentBall = nullptr;
 
