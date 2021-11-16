@@ -12,6 +12,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Main.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
 
 #include "Curve.hpp"
 #include "Bullet.hpp"
@@ -73,11 +74,12 @@ void drawGround(sf::RenderWindow& window) {
 	window.draw(arr);
 }
 
-int main()
-{
+int main(){
+	
+
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
 	window.setVerticalSyncEnabled(true);
-	window.setFramerateLimit(60);
+	//window.setFramerateLimit(60);
 	sf::RectangleShape* shape = new sf::RectangleShape(sf::Vector2f(120,16));
 	shape->setFillColor(sf::Color::Green);
 	shape->setPosition(800, 600);
@@ -112,8 +114,29 @@ int main()
 
 	PlayerPad* playerPad = new PlayerPad(EType::PlayerObject, shape);
 	Entity* ball = new Entity(EType::Ball, ballShape);
+	ball->setPosition(playerPad->getPosition());
+
+	auto vWallShapeLeft = new sf::RectangleShape(sf::Vector2f(16, 2048));
+	vWallShapeLeft->setOrigin(8, 0);
+	vWallShapeLeft->setFillColor(sf::Color::Green);
+
+	auto vWallShapeRight = new sf::RectangleShape(*vWallShapeLeft);
+
+	Entity* leftWall = new Entity(EType::Wall, vWallShapeLeft);
+	Entity* rightWall = new Entity(EType::Wall, vWallShapeRight);
+	rightWall->setPosition(sf::Vector2f(1280, 0));
+
+	auto vWallShapeTop = new sf::RectangleShape(sf::Vector2f(2048, 16));
+	vWallShapeTop->setOrigin(0, 8);
+	vWallShapeTop->setFillColor(sf::Color::Green);
+
+	Entity* topWall = new Entity(EType::Wall, vWallShapeTop);
+	topWall->setPosition(sf::Vector2f(0, 0));
 
 	World world;
+	world.data.push_back(topWall);
+	world.data.push_back(rightWall);
+	world.data.push_back(leftWall);
 	world.data.push_back(playerPad);
 	world.data.push_back(ball);
 
@@ -122,6 +145,7 @@ int main()
 	Bullet bullets;
 	bool mouseLeftWasPressed = false;
 	Curve c;
+
 
 	while (window.isOpen()){
 		sf::Event event;

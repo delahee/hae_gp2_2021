@@ -20,12 +20,12 @@ void PlayerPad::update(double dt)
 {
 	Entity::update(dt);
 	if (currentBall) {
+		currentBall->dx = currentBall->dy = 0.0;
 		currentBall->setPosition( spr->getPosition() + Vector2f(0,-4));
 	}
 }
 
-void PlayerPad::draw(sf::RenderWindow& win)
-{
+void PlayerPad::draw(sf::RenderWindow& win){
 	Entity::draw(win);
 
 }
