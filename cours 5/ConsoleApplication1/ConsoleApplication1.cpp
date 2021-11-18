@@ -15,11 +15,13 @@
 #include <SFML/Audio.hpp>
 
 #include "Curve.hpp"
-#include "Bullet.hpp"
+#include "Particle.hpp"
 #include "Entity.hpp"
 #include "World.hpp"
+#include "Game.hpp"
 
 //will contains our bricks
+
 
 void drawMountain(sf::RenderWindow& window) {
 
@@ -139,26 +141,50 @@ int main(){
 	world.data.push_back(leftWall);
 	world.data.push_back(playerPad);
 	world.data.push_back(ball);
+	
+	for( int iy = 1; iy < 5;++iy)
+		for (int ix = 0; ix < 14; ++ix) {
+			if( ( rand() % 10 >5 ))
+				continue;
 
-	auto b = new sf::RectangleShape(sf::Vector2f(64, 24));
-	auto szB = b->getSize();
-	szB.x *= 0.5;
-	szB.y *= 0.5;
-	b->setOrigin(szB);
-	b->setFillColor(sf::Color::Red);
-	b->setOutlineColor(sf::Color::Green);
-	b->setOutlineThickness(2);
-	b->setPosition(sf::Vector2f(128, 128));
-	Entity* brick0 = new Entity(EType::Brick, b);
-	world.data.push_back(brick0);
+			auto b = new sf::RectangleShape(sf::Vector2f(64, 24));
+			auto szB = b->getSize();
+			szB.x *= 0.5;
+			szB.y *= 0.5;
+			b->setOrigin(szB);
+			b->setFillColor(sf::Color::Red);
+			b->setOutlineColor(sf::Color::Green);
+			b->setOutlineThickness(2);
+
+			Entity* brick0 = new Entity(EType::Brick, b);
+			sf::Vector2f pos;
+			pos.x = ix * (brick0->getBoundingBox().width + 16) + 95;
+			pos.y = iy * (brick0->getBoundingBox().height + 16) + 64;
+			brick0->setPosition(pos);
+			world.data.push_back(brick0);
+		}
 
 	playerPad->currentBall = ball;
 
-	Bullet bullets;
+	
 	bool mouseLeftWasPressed = false;
 	Curve c;
 
+	sf::Texture bgTex;
+	if (!bgTex.loadFromFile("res/bg.jpg")) {
+		cout << "load texture failed\n";
+	}
 
+	int score = 0;
+	sf::Text scoreTxt;
+	scoreTxt.setPosition(48, 16);
+	scoreTxt.setFont(fArial);
+	scoreTxt.setFillColor(sf::Color::White);
+	scoreTxt.setOutlineColor(sf::Color::Magenta);
+	scoreTxt.setOutlineThickness(2);
+	scoreTxt.setCharacterSize(45);
+
+	sf::Vector2i winPos = window.getPosition();
 	while (window.isOpen()){
 		sf::Event event;
 		double dt = tExitFrame - tEnterFrame;
@@ -205,7 +231,7 @@ int main(){
 			if (dirLen) {
 				dxy = dir / dirLen;
 			}
-			dxy *= 60.0f * 6;
+			dxy *= 60.0f * 8;
 			if (playerPad->currentBall) {
 				auto ball = playerPad->currentBall;
 				ball->dx = dxy.x;
@@ -215,7 +241,6 @@ int main(){
 				ball->setPosition( sf::Vector2f(ball->getPosition().x, playerPad->getPosition().y - 16));
 			}
 			playerPad->currentBall = nullptr;
-
 		}
 
 		if (mouseLeftIsPressed) 
@@ -233,8 +258,10 @@ int main(){
 		gun.setRotation(-angleC2M * radToDeg);
 		gun.setPosition(shape->getPosition());
 		ptr.setPosition(mousePos);
-		tDt.setString( to_string(dt)+" FPS:"+ to_string((int)(1.0f / dt)));
+		//tDt.setString( to_string(dt)+" FPS:"+ to_string((int)(1.0f / dt)));
 		
+		scoreTxt.setString("SCORE :" + to_string(Game::score));
+
 		////////////////////
 
 		//CLEAR
@@ -242,10 +269,18 @@ int main(){
 		
 		////////////////////
 		//UPDATE
+		Game::parts.update(dt);
 		world.update(dt);
 
 		////////////////////
 		//DRAW
+		bgTex.setSmooth(true);
+
+		sf::Sprite bgSpr;
+		bgSpr.setTexture(bgTex);
+		bgSpr.setScale(1.5, 1.5);
+
+		window.draw(bgSpr);
 		drawMountain(window);
 		drawGround(window);
 
@@ -255,9 +290,18 @@ int main(){
 		c.draw(window);
 		window.draw(ptr);
 
+		Game::parts.draw(window);
+
 		//ui
 		window.draw(tDt);
+		window.draw(scoreTxt);
 		
+		if (Game::shake > 0)
+			window.setPosition(winPos + sf::Vector2i(0 + rand() % 5, 0 + rand() % 5));
+		else
+			window.setPosition(winPos);
+		Game::shake--;
+
 		window.display();
 		tExitFrame = getTimeStamp();
 	}

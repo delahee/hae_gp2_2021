@@ -16,8 +16,7 @@ void Entity::draw(sf::RenderWindow& win) {
 		win.draw(*spr);
 }
 
-void PlayerPad::update(double dt)
-{
+void PlayerPad::update(double dt){
 	Entity::update(dt);
 	if (currentBall) {
 		currentBall->dx = currentBall->dy = 0.0;

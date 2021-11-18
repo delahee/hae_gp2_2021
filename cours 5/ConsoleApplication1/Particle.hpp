@@ -3,7 +3,7 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/CircleShape.hpp"
 
-class Bullet { 
+class Particle { 
 public:
 	sf::CircleShape b;
 
@@ -15,7 +15,7 @@ public:
 
 	std::vector<bool>	alive;
 
-	Bullet();
+	Particle();
 
 	void create(float px, float py, float dx, float dy);
 	void update(double dt);

@@ -2,6 +2,7 @@
 
 #include "Entity.hpp"
 #include "World.hpp"
+#include "Game.hpp"
 
 using namespace sf;
 void World::update(double dt){
@@ -23,9 +24,9 @@ void World::update(double dt){
 
 		e->update(dt);
 
-		if (e->type == PlayerObject) {
+		if (e->type == PlayerObject) 
 			pad = (PlayerPad*)e;
-		}
+		
 		if (e->type == Ball) {
 			for (int j = 0; j < data.size();++j) {
 				auto oe = data[j];
@@ -34,6 +35,7 @@ void World::update(double dt){
 				}
 			}
 		}
+
 		if (e->type == Ball) {
 			for (int j = 0; j < data.size(); ++j) {
 				auto oe = data[j];
@@ -46,7 +48,7 @@ void World::update(double dt){
 			for (int j = 0; j < data.size(); ++j) {
 				auto oe = data[j];
 				if (oe->type == PlayerObject) {
-					collideBrickBall(oe, e);
+					collidePadBall(oe, e);
 				}
 			}
 		}
@@ -62,6 +64,33 @@ void World::update(double dt){
 			};
 		}
 	}
+
+	if (toBreakBrick.size()) {
+		for (auto b : toBreakBrick) {
+			auto iter = std::find(data.begin(), data.end(), b);
+			if (iter != data.end())
+				data.erase(iter);
+			delete b;
+		}
+		toBreakBrick.clear();
+	}
+}
+
+void World::collidePadBall(Entity* brick, Entity* ball) {
+	sf::Vector2f pos = ball->getPosition();
+	if (brick->getBoundingBox().contains(pos)) {
+		auto oldPos = ball->lastGoodPosition;
+		auto box = brick->getBoundingBox();
+		if ((oldPos.y < box.top) || (oldPos.y > (box.top + box.height))) {
+			ball->dy = -ball->dy;
+		}
+		else {
+			ball->dx = -ball->dx;
+		}
+
+
+		ball->setPosition(ball->lastGoodPosition);
+	}
 }
 
 void World::collideBrickBall(Entity* brick, Entity* ball) {
@@ -75,7 +104,15 @@ void World::collideBrickBall(Entity* brick, Entity* ball) {
 		else {
 			ball->dx = -ball->dx;
 		}
+		audio->ballPong.play();
 		ball->setPosition(ball->lastGoodPosition);
+		toBreakBrick.push_back(brick);
+		for( int i = 0; i < 12;++i)
+			Game::particlesAt(brick->getPosition());
+		Game::score += 100;
+		Game::shake = 30;	
+		audio->ballPong.play();
+
 	}
 }
 

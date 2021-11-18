@@ -1,15 +1,15 @@
-#include "Bullet.hpp"
+#include "Particle.hpp"
 
-Bullet::Bullet(){
-	int t = 10;
+Particle::Particle(){
+	int t = 3;
 	b = sf::CircleShape(t);
-	b.setOutlineThickness(2);
+	b.setOutlineThickness(1);
 	b.setFillColor(sf::Color::Yellow);
 	b.setOutlineColor(sf::Color::Red);
 	b.setOrigin(sf::Vector2f(t, t));
 }
 
-void Bullet::create(float _px, float _py, float _dx, float _dy){
+void Particle::create(float _px, float _py, float _dx, float _dy){
 	for (int i = 0; i < px.size(); ++i) {
 		if (!alive[i]) {
 			px[i] = _px;
@@ -27,11 +27,14 @@ void Bullet::create(float _px, float _py, float _dx, float _dy){
 	alive.push_back(true);
 }
 
-void Bullet::update(double dt) {
+void Particle::update(double dt) {
 	for (int i = 0; i < px.size(); ++i) {
 		if (alive[i]) {
 			px[i] += dx[i] * dt;
 			py[i] += dy[i] * dt;
+
+			dy[i] += (9.0f * 50.0 ) * dt;
+
 			if (
 				(px[i] > 3000) || (px[i] < -100) ||
 				(py[i] > 3000) || (py[i] < -100)
@@ -41,7 +44,8 @@ void Bullet::update(double dt) {
 		}
 	}
 }
-void Bullet::draw(sf::RenderWindow& win) {
+
+void Particle::draw(sf::RenderWindow& win) {
 	int idx = 0;
 	const int sz = px.size();
 	while (idx < sz) {

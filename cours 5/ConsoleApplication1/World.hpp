@@ -24,5 +24,8 @@ public:
 
 	void collideWallBall(Entity* wall, Entity* ball);
 	void collideBrickBall(Entity* wall, Entity* ball);
+	void collidePadBall(Entity* pad, Entity* ball);
+
+	std::vector<Entity*> toBreakBrick;
 };
 
