@@ -19,13 +19,13 @@
 #include "Particle.hpp"
 #include "Entity.hpp"
 #include "Game.hpp"
+#include "Turtle.hpp"
 
 
 int main(){
 	sf::RenderWindow window(sf::VideoMode(1280, 720), "SFML works!");
 	window.setVerticalSyncEnabled(true);
 	window.setFramerateLimit(60);
-	
 
 	sf::Font fArial;
 	if (!fArial.loadFromFile("res/arial.ttf"))	
@@ -41,6 +41,10 @@ int main(){
 	
 	bool mouseLeftWasPressed = false;
 
+	Turtle turtle;
+
+	turtle.trs.translate(400, 300);
+
 	sf::Vector2i winPos = window.getPosition();
 	while (window.isOpen()){
 		sf::Event event;
@@ -50,9 +54,18 @@ int main(){
 			if (event.type == sf::Event::Closed)
 				window.close();
 		}
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
+			turtle.trs.rotate(2 * dt * 60);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
+			turtle.trs.rotate(-2 * dt * 60);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
+			turtle.trs.translate(0, -2 * dt * 60);
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+			turtle.trs.translate(0, 2 * dt * 60);
 		}
 		
 		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
@@ -77,12 +90,14 @@ int main(){
 		////////////////////
 		//UPDATE
 		Game::parts.update(dt);
+		turtle.update(dt);
 
 		////////////////////
 		//DRAW
 
 		Game::parts.draw(window);
 
+		turtle.draw(window);
 		//ui
 		window.draw(tDt);
 		

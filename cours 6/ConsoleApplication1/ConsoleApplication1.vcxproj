@@ -155,6 +155,7 @@
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Int64Array.cpp" />
+    <ClCompile Include="Turtle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="List.hpp" />
     <ClInclude Include="Tool.hpp" />
     <ClInclude Include="Tree.hpp" />
+    <ClInclude Include="Turtle.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
