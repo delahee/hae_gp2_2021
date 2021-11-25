@@ -43,7 +43,10 @@ int main(){
 
 	Turtle turtle;
 
-	turtle.trs.translate(400, 300);
+	//turtle.trs.translate(400, 300);
+	//turtle.appendCmd(new Cmd(Advance, 250) );
+	//turtle.appendCmd(new Cmd(Rotate, 90) );
+	//turtle.appendCmd(new Cmd(Advance, 250));
 
 	sf::Vector2i winPos = window.getPosition();
 	while (window.isOpen()){
@@ -56,18 +59,69 @@ int main(){
 		}
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) || sf::Keyboard::isKeyPressed(sf::Keyboard::Q)) {
-			turtle.trs.rotate(2 * dt * 60);
+			turtle.rotate( -2 * dt * 60);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) || sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-			turtle.trs.rotate(-2 * dt * 60);
+			turtle.rotate( 2 * dt * 60);
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) || sf::Keyboard::isKeyPressed(sf::Keyboard::Z)) {
-			turtle.trs.translate(0, -2 * dt * 60);
+			turtle.translate(2 * dt * 60);
 		}
+
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) || sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-			turtle.trs.translate(0, 2 * dt * 60);
+			turtle.translate(-2 * dt * 60);
 		}
+
+		static bool penEnabled = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
+			penEnabled = !penEnabled;
+			turtle.setPen(penEnabled);
+		}
+
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F1) ) 
+			turtle.setPenColor(sf::Color::Red);
 		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F2) ) 
+			turtle.setPenColor(sf::Color::Green); 
+		
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::F3))
+			turtle.setPenColor(sf::Color::Blue);
+		
+		static bool enterWasPressed = false;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter) && !enterWasPressed) {
+			FILE* f = nullptr;
+			fopen_s(&f,"res/cmd.txt","rb");
+			if (f && !feof(f)) {
+				const int maxLineSize = 256;
+				char line[maxLineSize] = {};
+				for (;;) {
+					int64_t nb = 0;
+					fscanf_s(f, "%s %lld\n", line, maxLineSize, &nb );
+					std::string s = line;
+					if (s == "Advance") {
+						turtle.translate(nb);
+					}
+					else if (s == "Rotate") {
+						turtle.rotate(nb);
+					}
+					else if (s == "PenUp") {
+						turtle.setPen(false);
+					}
+					else if (s == "PenDown") {
+						turtle.setPen(true);
+					}
+					else if (s == "PenColor") {
+						turtle.setPenColor( sf::Color((unsigned int) nb) );
+					}
+					if (feof(f))
+						break;
+				}
+				fclose(f);
+			}
+			enterWasPressed = true;
+		}
+		enterWasPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::Enter);
+
 		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 		bool mouseIsReleased = (!mouseLeftIsPressed && mouseLeftWasPressed);
 

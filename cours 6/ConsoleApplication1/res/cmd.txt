@@ -1,0 +1,21 @@
+PenColor 4278255615
+PenDown
+Advance 120
+Rotate 90
+Advance 120
+Rotate 90
+Advance 120
+Rotate 90
+Advance 120
+Rotate 90
+PenUp
+Advance 200
+PenDown
+Advance 90
+Rotate 120
+Advance 90
+Rotate 120
+Advance 90
+Rotate 120
+
+
