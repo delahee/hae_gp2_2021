@@ -6,6 +6,7 @@
 #include "SFML/Graphics/RenderTexture.hpp"
 
 enum CmdType {
+	Clear,
 	Advance,
 	Rotate,
 	PenUp,
@@ -54,11 +55,14 @@ public:
 
 						Turtle();
 
+	void				reset();
 	virtual void		update(double dt);
 	virtual void		draw(sf::RenderWindow& win);
 
 	//ajoute les cmds a la fin de la liste courante
 	void				appendCmd(Cmd * cmd);
+
+	void				write(FILE* f, Cmd* cmd);
 
 	void				translate(float value) { appendCmd(new Cmd(Advance, value)); };
 	void				rotate(float value) { appendCmd(new Cmd(Rotate, value)); };
@@ -76,9 +80,14 @@ public:
 		appendCmd(colCmd);
 	};
 
+	void writeCommands(const char* fname);
+
+	sf::Vector2f getPosition() { return trs.transformPoint(sf::Vector2f()); };
+
+	Cmd* cmds = nullptr;
+
 protected:
 	sf::Transform		trs;
 	Cmd*				applyCmd(Cmd* cmd);
 	Cmd*				applyCmdInterp(Cmd* cmd,double dt);
-	Cmd*				cmds = nullptr;
 };

@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\SFML_64bit\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +152,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="imgui-SFML.cpp" />
+    <ClCompile Include="imgui.cpp" />
+    <ClCompile Include="imgui_demo.cpp" />
+    <ClCompile Include="imgui_draw.cpp" />
+    <ClCompile Include="imgui_tables.cpp" />
+    <ClCompile Include="imgui_widgets.cpp" />
     <ClCompile Include="Particle.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="Entity.cpp" />
@@ -159,6 +166,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.hpp" />
+    <ClInclude Include="imconfig.h" />
+    <ClInclude Include="imgui-SFML.h" />
+    <ClInclude Include="imgui-SFML_export.h" />
+    <ClInclude Include="imgui.h" />
     <ClInclude Include="Particle.hpp" />
     <ClInclude Include="Curve.hpp" />
     <ClInclude Include="Entity.hpp" />

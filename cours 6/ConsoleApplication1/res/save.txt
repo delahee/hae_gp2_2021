@@ -1,0 +1,47 @@
+Rotate -140
+Advance 200
+Rotate 210
+Advance 200
+Rotate -150
+Advance 200
+Rotate 210
+Advance 200
+PenUp
+PenDown
+PenUp
+PenDown
+PenUp
+PenDown
+PenUp
+PenDown
+PenUp
+PenDown
+PenUp
+PenDown
+PenUp
+Clear
+PenColor 4278255615
+PenDown
+Rotate -20
+Advance 200
+Rotate -140
+Advance 200
+Rotate 210
+Advance 200
+Rotate -150
+Advance 200
+Rotate 210
+Advance 200
+Clear
+PenColor 4278255615
+PenDown
+Rotate -20
+Advance 200
+Rotate -140
+Advance 200
+Rotate 210
+Advance 200
+Rotate -150
+Advance 200
+Rotate 210
+Advance 200
