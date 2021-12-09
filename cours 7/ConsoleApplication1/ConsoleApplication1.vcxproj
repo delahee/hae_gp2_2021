@@ -165,7 +165,6 @@
     <ClCompile Include="src\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game.hpp" />
     <ClInclude Include="libs\imconfig.h" />
     <ClInclude Include="libs\imgui-SFML.h" />
     <ClInclude Include="libs\imgui-SFML_export.h" />

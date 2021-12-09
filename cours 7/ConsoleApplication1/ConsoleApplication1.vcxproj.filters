@@ -65,9 +65,6 @@
     <ClInclude Include="Particle.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Game.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="libs\imgui_internal.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>

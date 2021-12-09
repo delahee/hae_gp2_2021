@@ -57,6 +57,7 @@ int main(){
 	spr->setOutlineColor(sf::Color::Green);
 	spr->setOutlineThickness(4);
 	spr->setOrigin(spr->getSize().x*0.5, spr->getSize().y);
+	Game::init();
 	Game::player = new Entity(spr, Game::W / Entity::stride *0.5, lround(Game::H / Entity::stride) -2);
 
 	while (window.isOpen()){
