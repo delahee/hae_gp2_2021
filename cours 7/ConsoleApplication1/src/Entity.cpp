@@ -19,6 +19,8 @@ void Entity::im(){
 	modified |= DragFloat("dx", &dx, 1);
 	modified |= DragFloat("dy", &dy, 1);
 
+	modified |= DragFloat("gy", &gy, 0.001f);
+
 	modified |= DragFloat("frict_x", &frict_x, 0.01f);
 	modified |= DragFloat("frict_y", &frict_y, 0.01f);
 
@@ -52,7 +54,7 @@ bool Entity::isColliding(int ccx, int ccy) {
 }
 
 void Entity::update(double dt) {
-
+	dy += gy * dt;
 	rx += dt * dx;
 	ry += dt * dy;
 
@@ -83,7 +85,7 @@ void Entity::update(double dt) {
 	while (ry >= 1) {
 		if (isColliding(cx, cy+1)) {
 			dy = 0;
-			ry = 0.9f;
+			ry = 0.999f;
 		}
 		else {
 			ry--;

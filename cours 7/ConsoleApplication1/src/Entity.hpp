@@ -19,6 +19,8 @@ public:
 	float			dx = 0.0f;
 	float			dy = 0.0f;
 
+	float			gy = 90;
+
 	float			frict_x = 0.93f;
 	float			frict_y = 0.93f;
 
