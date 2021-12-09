@@ -70,6 +70,24 @@ int main(){
 
 			if (event.type == sf::Event::Closed)
 				window.close();
+
+			if (event.type == sf::Event::MouseButtonPressed) {
+				auto cx = event.mouseButton.x / Entity::stride;
+				auto cy = event.mouseButton.y / Entity::stride;
+
+				int pos = -1;
+				int idx = 0;
+				for (auto& v : Game::walls) {
+					if (v.x == cx && v.y == cy)
+						pos = idx;
+					idx++;
+				}
+
+				if (pos < 0)
+					Game::walls.push_back(sf::Vector2i(cx, cy));
+				else
+					Game::walls.erase(Game::walls.begin() + pos);
+			}
 		}
 
 		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);

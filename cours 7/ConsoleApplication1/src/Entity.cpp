@@ -2,6 +2,7 @@
 #include "Entity.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "imgui.h"
+#include "Game.hpp"
 
 using namespace sf;
 
@@ -39,10 +40,14 @@ bool Entity::isColliding(int ccx, int ccy) {
 
 	if (ccx >= 1280 / stride)
 		return true;
+
 	if (ccy >= 720 / stride)
 		return true;
 
-	//sinon consulter "la liste de case"
+	for (auto& vi : Game::walls)
+		if ( (vi.x == ccx) && (vi.y == ccy))
+			return true;
+
 	return false;
 }
 

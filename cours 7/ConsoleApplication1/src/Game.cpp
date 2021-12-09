@@ -30,14 +30,16 @@ void Game::update(double dt) {
 }
 
 void Game::render(sf::RenderWindow& win) {
-	if(player) player->draw(win);
-
-	sf::RectangleShape rs(sf::Vector2f(Entity::stride,Entity::stride));
+	sf::RectangleShape rs(sf::Vector2f(Entity::stride, Entity::stride));
 	rs.setOutlineThickness(1);
 	rs.setOutlineColor(sf::Color::Red);
-	for (auto v : walls) {
+	for (auto& v : walls) {
 		rs.setPosition(v.x * Entity::stride, v.y * Entity::stride);
 		win.draw(rs);
 	}
+
+	if(player) player->draw(win);
+
+	
 
 }
