@@ -1,64 +1,35 @@
 #pragma once
-#include "SFML/Graphics/Shape.hpp"
-#include "SFML/Graphics/Rect.hpp"
-#include "SFML/Graphics/RenderWindow.hpp"
 
-enum EType {
-	PlayerObject,
-	Brick,
-	Wall,
-	Ball,
-};
+#include "SFML/Graphics/Shape.hpp"
+#include "SFML/Graphics/RenderWindow.hpp"
 
 class Entity {
 public:
 	sf::Shape*		spr = nullptr;
-	EType			type;
 
-	bool visible = true;
-	float dx = 0.0f;
-	float dy = 0.0f;
+	bool			visible = true;
 
-	sf::Vector2f	lastGoodPosition;
+	float			cx = 0.0f;
+	float			cy = 0.0f;
+	float			rx = 0.0f;
+	float			ry = 0.0f;
+	float			px = 0.0f;
+	float			py = 0.0f;
 
-	Entity(EType _type,sf::Shape* _spr) {
-		type = _type;
-		spr = _spr;
+	float			dx = 0.0f;
+	float			dy = 0.0f;
+
+	inline static const int	stride = 32;
+
+	Entity(sf::Shape* _spr, float _cx, float _cy) {
+		this->spr = _spr;
+		cx = _cx;
+		cy = _cy;
+		syncSprite();
 	}
 
-	~Entity() {
-		if (spr) {
-			delete spr;
-			spr = nullptr;
-		}
-	}
-
-	sf::Vector2f getPosition() {
-		return spr->getPosition();
-	}
-
-	void setPosition(sf::Vector2f pos) {
-		return spr->setPosition(pos);
-	}
-
-	sf::FloatRect getBoundingBox() {
-		return spr->getGlobalBounds();
-	}
-
-	virtual void update(double dt);
-	virtual void draw(sf::RenderWindow& win);
-};
-
-class PlayerPad : public Entity {
-public:
-
-	Entity* currentBall = nullptr;
-
-	PlayerPad(EType type, sf::Shape* _spr) : Entity(type, _spr) {
-
-	}
-
-
-	virtual void update(double dt);
-	virtual void draw(sf::RenderWindow& win);
+	void			im();
+	virtual void	update(double dt);
+	virtual void	draw(sf::RenderWindow& win);
+	void			syncSprite();
 };
