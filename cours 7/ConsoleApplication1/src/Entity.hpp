@@ -19,6 +19,9 @@ public:
 	float			dx = 0.0f;
 	float			dy = 0.0f;
 
+	float			frict_x = 0.93f;
+	float			frict_y = 0.93f;
+
 	inline static const int	stride = 32;
 
 	Entity(sf::Shape* _spr, float _cx, float _cy) {
@@ -29,6 +32,7 @@ public:
 	}
 
 	void			im();
+	bool			isColliding(int _cx, int _cy);
 	virtual void	update(double dt);
 	virtual void	draw(sf::RenderWindow& win);
 	void			syncSprite();

@@ -20,10 +20,18 @@
 #include "Entity.hpp"
 #include "Game.hpp"
 
+float clamp(float val, float a, float b) {
+	if (val < a)
+		val = a;
+	if (val > b)
+		val = b;
+	return val;
+}
+
 int main(){
 	sf::RenderWindow window(sf::VideoMode(Game::W, Game::H), "SFML works!");
 	window.setVerticalSyncEnabled(true);
-	//window.setFramerateLimit(60);
+	window.setFramerateLimit(60);
 
 	sf::Font fArial;
 	if (!fArial.loadFromFile("res/arial.ttf"))	
@@ -72,12 +80,24 @@ int main(){
 			
 		}
 
+		auto player = Game::player;
+		float max_speed_x = 10;
+		float max_speed_y = 10;
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-			Game::player->rx -= 10 * 1.0f * dt;
+			player->dx -= max_speed_x * 0.5;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-			Game::player->rx += 10 * 1.0f * dt;
+			player->dx += max_speed_x * 0.5;
 		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+			player->dy -= max_speed_y * 0.5;
+		}
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			player->dy += max_speed_y * 0.5;
+		}
+
+		player->dx = std::clamp(player->dx, -max_speed_x, max_speed_x);
+		player->dy = std::clamp(player->dy, -max_speed_y, max_speed_y);
 
 		if (mouseLeftIsPressed) 
 			mouseLeftWasPressed = true;
@@ -91,7 +111,9 @@ int main(){
 		
 		////////////////////
 		//UPDATE
-		ImGui::SFML::Update(window, sf::milliseconds((int)(dt * 1000.0)));
+		auto dtms = ((int)(dt * 1000.0));
+		auto ms = sf::milliseconds(dtms==0?1:dtms);
+		ImGui::SFML::Update(window, ms);
 
 		Game::im();
 
