@@ -5,6 +5,7 @@
 Particle Game::parts;
 int Game::shake = 0;
 Entity * Game::player= nullptr;
+Dijkstra Game::dij;
 std::vector<sf::Vector2i> Game::walls;
 
 void Game::particlesAt(sf::Vector2f pos) {
@@ -13,6 +14,7 @@ void Game::particlesAt(sf::Vector2f pos) {
 }
 
 void Game::init() {
+	dij.dist[sf::Vector2i(0, 0)] = 1.0f;
 	walls.push_back(sf::Vector2i(5, 5));
 }
 

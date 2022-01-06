@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
 #include "SFML/Window/Keyboard.hpp"
+#include <map>
 
 using namespace sf;
 
@@ -272,3 +273,12 @@ void CoverState::onUpdate(double dt) {
 		e->setState(new IdleState(e));
 	}
 }
+
+// x y 
+// 0----
+// |
+// |
+//  (x,y) => x | (y<<10) 
+// ( 0,1) => 1024 | 0
+// ( 1,1) => 1024 | 1 => 1025
+// d[1024*1024] d[1025] => (0,1)
