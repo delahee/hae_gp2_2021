@@ -104,21 +104,7 @@ int main(){
 
 		static bool wasPressedUp = false;
 
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-			player->dx -= max_speed * 0.5;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-			player->dx += max_speed * 0.5;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ) {
-			player->dy -= max_speed * 0.5;
-		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-			player->dy += max_speed * 0.5;
-		}
 		
-		player->dx = std::clamp(player->dx, -max_speed, max_speed);
-		player->dy = std::clamp(player->dy, -max_speed, max_speed);
 
 		if (mouseLeftIsPressed) 
 			mouseLeftWasPressed = true;

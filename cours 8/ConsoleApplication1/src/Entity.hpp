@@ -21,9 +21,7 @@ public:
 	};
 
 	virtual void onEnter();
-	virtual void onUpdate(double dt){
-
-	}
+	virtual void onUpdate(double dt);
 };
 
 class Entity {

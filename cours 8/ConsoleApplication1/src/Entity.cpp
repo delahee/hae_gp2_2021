@@ -4,6 +4,7 @@
 #include "imgui.h"
 #include "Game.hpp"
 #include "SFML/Graphics/RectangleShape.hpp"
+#include "SFML/Window/Keyboard.hpp"
 
 using namespace sf;
 
@@ -125,4 +126,24 @@ void IdleState::onEnter() {
 
 	spr->setOutlineColor(sf::Color::Yellow);
 	e->spr = spr;
+}
+
+void IdleState::onUpdate(double dt) {
+	float max_speed = 10;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		e->dx -= max_speed * 0.5;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		e->dx += max_speed * 0.5;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		e->dy -= max_speed * 0.5;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		e->dy += max_speed * 0.5;
+	}
+
+	e->dx = std::clamp(e->dx, -max_speed, max_speed);
+	e->dy = std::clamp(e->dy, -max_speed, max_speed);
 }
