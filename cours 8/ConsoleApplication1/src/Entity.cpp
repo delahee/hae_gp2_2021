@@ -8,6 +8,12 @@
 
 using namespace sf;
 
+void Entity::setState(State* ns){
+	delete current;
+	current = ns;
+	current->onEnter();
+}
+
 void Entity::syncSprite(){
 	px = (cx + rx) * stride;
 	py = (cy + ry) * stride;
@@ -129,7 +135,91 @@ void IdleState::onEnter() {
 }
 
 void IdleState::onUpdate(double dt) {
-	float max_speed = 10;
+	life += dt;
+
+	bool letsMove = false;
+	if (	sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
+		||	sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
+		||	sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
+		||	sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+		letsMove = true;
+	}
+	if (letsMove) {
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+			|| sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+			e->setState(new RunState(e));
+		}
+		else 
+			e->setState(new WalkState(e));
+	}
+	else {
+		if( life > 0.3){
+			bool collides = false;
+			collides |= e->isColliding(e->cx - 1, e->cy);
+			collides |= e->isColliding(e->cx + 1, e->cy);
+			collides |= e->isColliding(e->cx , e->cy - 2);
+			collides |= e->isColliding(e->cx , e->cy - 1);
+			collides |= e->isColliding(e->cx , e->cy + 1);
+			if( collides)
+				e->setState(new CoverState(e));
+		}
+	}
+}
+
+void WalkState::onEnter(){
+	if (e->spr != nullptr)
+		delete e->spr;
+	sf::RectangleShape* spr = new sf::RectangleShape(sf::Vector2f(12, 28));
+	spr->setFillColor(sf::Color::Blue);
+	spr->setOutlineThickness(4);
+	spr->setOrigin(spr->getSize().x * 0.5, spr->getSize().y);
+	spr->setOutlineColor(sf::Color::Green);
+	e->spr = spr;
+}
+
+void WalkState::onUpdate(double dt){
+	float max_speed = 6;
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
+		e->dx -= max_speed * 0.5;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+		e->dx += max_speed * 0.5;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
+		e->dy -= max_speed * 0.5;
+	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		e->dy += max_speed * 0.5;
+	}
+
+	e->dx = std::clamp(e->dx, -max_speed, max_speed);
+	e->dy = std::clamp(e->dy, -max_speed, max_speed);
+
+	if( abs(e->dx) < 1  && abs(e->dy) < 1 ){
+		e->setState(new IdleState(e));
+	}
+	else
+	if(		sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+		||	sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)){
+		e->setState(new RunState(e));
+	}
+}
+
+void RunState::onEnter() {
+	if (e->spr != nullptr)
+		delete e->spr;
+	sf::RectangleShape* spr = new sf::RectangleShape(sf::Vector2f(12, 28));
+	spr->setFillColor(sf::Color::Blue);
+	spr->setOutlineThickness(4);
+	spr->setOrigin(spr->getSize().x * 0.5, spr->getSize().y);
+	spr->setOutlineColor(sf::Color::Red);
+	e->spr = spr;
+}
+
+void RunState::onUpdate(double dt) {
+	float max_speed = 12;
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
 		e->dx -= max_speed * 0.5;
@@ -146,4 +236,39 @@ void IdleState::onUpdate(double dt) {
 
 	e->dx = std::clamp(e->dx, -max_speed, max_speed);
 	e->dy = std::clamp(e->dy, -max_speed, max_speed);
+	if (abs(e->dx) < 1 && abs(e->dy) < 1) {
+		e->setState(new IdleState(e));
+	}
+	else {
+		if (!sf::Keyboard::isKeyPressed(sf::Keyboard::LShift)
+			&& !sf::Keyboard::isKeyPressed(sf::Keyboard::RShift)) {
+			e->setState(new WalkState(e));
+		}
+	}
+}
+
+
+void CoverState::onEnter() {
+	if (e->spr != nullptr)
+		delete e->spr;
+	sf::RectangleShape* spr = new sf::RectangleShape(sf::Vector2f(12, 28));
+	spr->setFillColor(sf::Color::Magenta);
+	spr->setOutlineThickness(4);
+	spr->setOrigin(spr->getSize().x * 0.5, spr->getSize().y);
+	spr->setOutlineColor(sf::Color::Blue);
+	e->spr = spr;
+}
+
+void CoverState::onUpdate(double dt) {
+	bool moved = false;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)
+		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Right)
+		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Up)
+		|| sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+		moved = true;
+	}
+
+	if(moved){
+		e->setState(new IdleState(e));
+	}
 }

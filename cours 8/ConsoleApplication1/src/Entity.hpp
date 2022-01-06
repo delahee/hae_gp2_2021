@@ -7,7 +7,8 @@ class Entity;
 
 class State {
 	public:
-		Entity* e = nullptr;
+		Entity*		e = nullptr;
+		float		life = 0.0f;
 
 		virtual void onEnter() = 0;
 		virtual void onUpdate(double dt) = 0;
@@ -20,6 +21,35 @@ public:
 		e = _e;
 	};
 
+	virtual void onEnter();
+	virtual void onUpdate(double dt);
+};
+
+class WalkState : public State {
+public:
+	WalkState(Entity* _e) {
+		e = _e;
+	};
+
+	virtual void onEnter();
+	virtual void onUpdate(double dt);
+};
+
+class RunState : public State {
+public:
+	RunState(Entity* _e) {
+		e = _e;
+	};
+
+	virtual void onEnter();
+	virtual void onUpdate(double dt);
+};
+
+class CoverState : public State {
+public:
+	CoverState(Entity* _e) {
+		e = _e;
+	};
 	virtual void onEnter();
 	virtual void onUpdate(double dt);
 };
@@ -64,5 +94,7 @@ public:
 	bool			isColliding(int _cx, int _cy);
 	virtual void	update(double dt);
 	virtual void	draw(sf::RenderWindow& win);
+
+	void			setState(State* ns);
 	void			syncSprite();
 };
