@@ -3,6 +3,7 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "imgui.h"
 #include "Game.hpp"
+#include "SFML/Graphics/RectangleShape.hpp"
 
 using namespace sf;
 
@@ -54,6 +55,9 @@ bool Entity::isColliding(int ccx, int ccy) {
 }
 
 void Entity::update(double dt) {
+
+	if (current)
+		current->onUpdate(dt);
 	dy += gy * dt;
 	rx += dt * dx;
 	ry += dt * dy;
@@ -111,3 +115,14 @@ void Entity::draw(sf::RenderWindow& win) {
 		win.draw(*spr);
 }
 
+void IdleState::onEnter() {
+	if (e->spr != nullptr)
+		delete e->spr;
+	sf::RectangleShape* spr = new sf::RectangleShape(sf::Vector2f(12, 28));
+	spr->setFillColor(sf::Color::Red);
+	spr->setOutlineThickness(4);
+	spr->setOrigin(spr->getSize().x * 0.5, spr->getSize().y);
+
+	spr->setOutlineColor(sf::Color::Yellow);
+	e->spr = spr;
+}

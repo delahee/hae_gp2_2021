@@ -37,9 +37,5 @@ void Game::render(sf::RenderWindow& win) {
 		rs.setPosition(v.x * Entity::stride, v.y * Entity::stride);
 		win.draw(rs);
 	}
-
 	if(player) player->draw(win);
-
-	
-
 }

@@ -56,7 +56,7 @@ int main(){
 	spr->setFillColor(sf::Color::Red);
 	spr->setOutlineColor(sf::Color::Green);
 	spr->setOutlineThickness(4);
-	spr->setOrigin(spr->getSize().x*0.5, spr->getSize().y);
+	spr->setOrigin(spr->getSize().x * 0.5, spr->getSize().y);
 	Game::init();
 	Game::player = new Entity(spr, Game::W / Entity::stride *0.5, lround(Game::H / Entity::stride) -2);
 
@@ -100,27 +100,25 @@ int main(){
 		}
 
 		auto player = Game::player;
-		float max_speed_x = 10;
-		float max_speed_y = 30;
+		float max_speed = 10;
 
 		static bool wasPressedUp = false;
 
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {
-			player->dx -= max_speed_x * 0.5;
+			player->dx -= max_speed * 0.5;
 		}
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-			player->dx += max_speed_x * 0.5;
+			player->dx += max_speed * 0.5;
 		}
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && !wasPressedUp) {
-			player->dy -= max_speed_y * 2;
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ) {
+			player->dy -= max_speed * 0.5;
 		}
-		wasPressedUp = sf::Keyboard::isKeyPressed(sf::Keyboard::Up);
-		//if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-		//	player->dy += max_speed_y * 0.5;
-		//}
-
-		player->dx = std::clamp(player->dx, -max_speed_x, max_speed_x);
-		player->dy = std::clamp(player->dy, -max_speed_y, max_speed_y);
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
+			player->dy += max_speed * 0.5;
+		}
+		
+		player->dx = std::clamp(player->dx, -max_speed, max_speed);
+		player->dy = std::clamp(player->dy, -max_speed, max_speed);
 
 		if (mouseLeftIsPressed) 
 			mouseLeftWasPressed = true;
