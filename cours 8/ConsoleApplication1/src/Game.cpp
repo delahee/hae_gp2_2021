@@ -40,4 +40,42 @@ void Game::render(sf::RenderWindow& win) {
 		win.draw(rs);
 	}
 	if(player) player->draw(win);
+
+	sf::RectangleShape rrs(sf::Vector2f(4, 4));
+	rrs.setFillColor(sf::Color::Red);
+	auto& g = dij.g;
+	for( auto & v : g){
+		rrs.setPosition(v.first.x * Entity::stride + 0.5 * Entity::stride, v.first.y * Entity::stride + 0.5 * Entity::stride);
+		win.draw(rrs);
+	}
+}
+
+static bool isColliding(int ccx, int ccy) {
+	if (ccx < 0)
+		return true;
+	if (ccy < 0)
+		return true;
+
+	if (ccx >= 1280 / Entity::stride)
+		return true;
+
+	if (ccy >= 720 / Entity::stride)
+		return true;
+
+	for (auto& vi : Game::walls)
+		if ((vi.x == ccx) && (vi.y == ccy))
+			return true;
+
+	return false;
+}
+
+void Dijkstra::compute(){
+	g.clear();
+	int maxCellW = Game::W / Entity::stride + 1;
+	int maxCellH = Game::H / Entity::stride + 1;
+	for( int y = 0; y < maxCellH;++y)
+		for (int x = 0; x < maxCellW; ++x){
+			if(!isColliding(x,y))
+				g[sf::Vector2i(x, y)] = true;
+		}
 }

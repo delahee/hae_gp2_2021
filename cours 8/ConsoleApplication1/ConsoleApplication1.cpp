@@ -88,7 +88,14 @@ int main(){
 				else
 					Game::walls.erase(Game::walls.begin() + pos);
 			}
+
+			if (event.type == sf::Event::KeyReleased) {
+				if( event.key.code == sf::Keyboard::Enter){
+					Game::dij.compute();
+				}
+			}
 		}
+
 
 		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
 		bool mouseIsReleased = (!mouseLeftIsPressed && mouseLeftWasPressed);

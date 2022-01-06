@@ -18,7 +18,10 @@ namespace std {
 
 class Dijkstra{
 public:
-	std::unordered_map<sf::Vector2i, float> dist;
+	std::unordered_map<sf::Vector2i, bool>		g;
+	std::unordered_map<sf::Vector2i, float>		dist;
+
+	void										compute();
 };
 
 class Game {
