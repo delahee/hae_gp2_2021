@@ -11,8 +11,10 @@ public:
 
 	float			cx = 0.0f;
 	float			cy = 0.0f;
+
 	float			rx = 0.0f;
 	float			ry = 0.0f;
+
 	float			px = 0.0f;
 	float			py = 0.0f;
 
