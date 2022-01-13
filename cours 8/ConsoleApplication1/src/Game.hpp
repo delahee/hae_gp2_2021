@@ -34,6 +34,7 @@ public:
 	static inline const int W = 1280;
 	static inline const int H = 720;
 
+	static std::vector<sf::Vector2i> currentPath;
 	static Dijkstra		dij;
 	static int			shake;
 	static Particle		parts;

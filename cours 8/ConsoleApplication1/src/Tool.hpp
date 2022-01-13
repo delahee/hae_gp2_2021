@@ -24,3 +24,7 @@ inline float catmull(float p0, float p1, float p2, float p3, float t) {
 
 	return 0.5f * q;
 }
+
+inline float fequal(float a, float b){
+	return abs(b - a) < 0.1;
+}

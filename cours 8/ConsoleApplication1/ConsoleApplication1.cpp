@@ -65,6 +65,11 @@ int main(){
 
 		double dt = tExitFrame - tEnterFrame;
 		tEnterFrame = getTimeStamp();
+
+		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+		bool mouseIsReleased = (!mouseLeftIsPressed && mouseLeftWasPressed);
+		bool shifIsPressed = sf::Keyboard::isKeyPressed(sf::Keyboard::LShift);
+
 		while (window.pollEvent(event)){
 			ImGui::SFML::ProcessEvent(window, event);
 
@@ -72,21 +77,49 @@ int main(){
 				window.close();
 
 			if (event.type == sf::Event::MouseButtonPressed) {
-				auto cx = event.mouseButton.x / Entity::stride;
-				auto cy = event.mouseButton.y / Entity::stride;
 
-				int pos = -1;
-				int idx = 0;
-				for (auto& v : Game::walls) {
-					if (v.x == cx && v.y == cy)
-						pos = idx;
-					idx++;
+				if( shifIsPressed){
+					auto cx = event.mouseButton.x / Entity::stride;
+					auto cy = event.mouseButton.y / Entity::stride;
+
+					auto& p = Game::currentPath;
+					Game::currentPath.clear();
+					sf::Vector2i start = sf::Vector2i(Game::player->cx, Game::player->cy);
+					sf::Vector2i end = sf::Vector2i(cx, cy);
+
+					sf::Vector2i cur = end;
+					Game::currentPath.push_back(end);
+					while(cur != start){
+						auto pos = Game::dij.pred.find(cur);
+						if( pos != Game::dij.pred.end()){
+							cur = Game::dij.pred[cur];
+							Game::currentPath.push_back(cur);
+						}
+						else {
+							Game::currentPath.clear();
+							break;
+						}
+					}
+					std::reverse(p.begin(), p.end());
+					Game::player->curPath = p;
 				}
+				else {
+					auto cx = event.mouseButton.x / Entity::stride;
+					auto cy = event.mouseButton.y / Entity::stride;
 
-				if (pos < 0)
-					Game::walls.push_back(sf::Vector2i(cx, cy));
-				else
-					Game::walls.erase(Game::walls.begin() + pos);
+					int pos = -1;
+					int idx = 0;
+					for (auto& v : Game::walls) {
+						if (v.x == cx && v.y == cy)
+							pos = idx;
+						idx++;
+					}
+
+					if (pos < 0)
+						Game::walls.push_back(sf::Vector2i(cx, cy));
+					else
+						Game::walls.erase(Game::walls.begin() + pos);
+				}
 			}
 
 			if (event.type == sf::Event::KeyReleased) {
@@ -97,8 +130,7 @@ int main(){
 		}
 
 
-		bool mouseLeftIsPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
-		bool mouseIsReleased = (!mouseLeftIsPressed && mouseLeftWasPressed);
+		
 
 		sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(window));
 

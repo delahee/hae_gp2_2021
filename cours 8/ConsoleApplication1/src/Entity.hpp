@@ -2,6 +2,7 @@
 
 #include "SFML/Graphics/Shape.hpp"
 #include "SFML/Graphics/RenderWindow.hpp"
+#include <optional>
 
 class Entity;
 
@@ -77,6 +78,9 @@ public:
 	float			frict_x = 0.93f;
 	float			frict_y = 0.93f;
 
+	std::vector<sf::Vector2i>	curPath;
+	std::optional<sf::Vector2i> target;
+
 	inline static const int	stride = 32;
 
 	State*			current = nullptr;
@@ -92,6 +96,7 @@ public:
 
 	void			im();
 	bool			isColliding(int _cx, int _cy);
+	void			updatePath(double dt);
 	virtual void	update(double dt);
 	virtual void	draw(sf::RenderWindow& win);
 

@@ -8,6 +8,7 @@ int Game::shake = 0;
 Entity * Game::player= nullptr;
 Dijkstra Game::dij;
 std::vector<sf::Vector2i> Game::walls;
+std::vector<sf::Vector2i> Game::currentPath;
 
 void Game::particlesAt(sf::Vector2f pos) {
 	int flip = (rand() % 2 == 0) ? 1 : -1;
@@ -69,6 +70,19 @@ void Game::render(sf::RenderWindow& win) {
 		arr.append(end);
 	}
 	win.draw(arr);
+
+	sf::VertexArray arrPath;
+	arrPath.setPrimitiveType(sf::LinesStrip);
+	for (auto& p : currentPath) {
+		sf::Vertex start;
+		start.color = sf::Color::Magenta;
+
+		start.position.x = (p.x + 0.5) * Entity::stride;
+		start.position.y = (p.y + 0.5) * Entity::stride;
+
+		arrPath.append(start);
+	}
+	win.draw(arrPath);
 }
 
 static bool isColliding(int ccx, int ccy) {
@@ -143,6 +157,7 @@ void Dijkstra::compute( const sf::Vector2i& start ){
 			break;
 
 		auto pos = std::find(queue.begin(), queue.end(),*s1);
+			if(pos != queue.end())
 		queue.erase(pos);
 		sf::Vector2i dirs[] = {
 			sf::Vector2i(0,1),
