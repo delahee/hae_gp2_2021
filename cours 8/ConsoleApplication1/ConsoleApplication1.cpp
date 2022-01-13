@@ -91,7 +91,7 @@ int main(){
 
 			if (event.type == sf::Event::KeyReleased) {
 				if( event.key.code == sf::Keyboard::Enter){
-					Game::dij.compute();
+					Game::dij.compute( sf::Vector2i( Game::player->cx,Game::player->cy) );
 				}
 			}
 		}

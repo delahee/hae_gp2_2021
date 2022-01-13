@@ -2,6 +2,7 @@
 #include "Entity.hpp"
 #include "imgui.h"
 #include "SFML/Graphics/RectangleShape.hpp"
+#include <optional>
 Particle Game::parts;
 int Game::shake = 0;
 Entity * Game::player= nullptr;
@@ -48,6 +49,26 @@ void Game::render(sf::RenderWindow& win) {
 		rrs.setPosition(v.first.x * Entity::stride + 0.5 * Entity::stride, v.first.y * Entity::stride + 0.5 * Entity::stride);
 		win.draw(rrs);
 	}
+
+	sf::VertexArray arr;
+	arr.setPrimitiveType(sf::Lines);
+	for( auto & p : dij.pred){
+		sf::Vertex start;
+		sf::Vertex end;
+		start.color = sf::Color::Green;
+		start.color.a = 127;
+		end.color = start.color;
+
+		start.position.x = (p.first.x + 0.5) * Entity::stride;
+		start.position.y = (p.first.y + 0.5) * Entity::stride;
+
+		end.position.x = (p.second.x + 0.5) * Entity::stride;
+		end.position.y = (p.second.y + 0.5) * Entity::stride;
+
+		arr.append(start);
+		arr.append(end);
+	}
+	win.draw(arr);
 }
 
 static bool isColliding(int ccx, int ccy) {
@@ -69,7 +90,41 @@ static bool isColliding(int ccx, int ccy) {
 	return false;
 }
 
-void Dijkstra::compute(){
+std::optional<sf::Vector2i> Dijkstra::find_min(std::vector<sf::Vector2i> & q) {
+	std::optional<sf::Vector2i>  res  = std::nullopt;
+	float distMin = 1024 * 1024;
+	for( auto& s : q){
+		if( dist[s] < distMin){
+			distMin = dist[s];
+			res = s;
+		}
+	}
+	return res;
+}
+
+
+void Dijkstra::init(const sf::Vector2i& start){
+	for (auto& s : g) {
+		dist[s.first] = 1024 * 1024;
+		queue.push_back(s.first);
+	}
+	dist[start] = 0;
+}
+
+float len(const sf::Vector2i & s){
+	return sqrt( s.y * s.y + s.x * s.x);
+}
+
+void Dijkstra::relax(sf::Vector2i& s1, sf::Vector2i& s2) {
+	float d_s1s2 = len(s2 - s1);
+	if( dist[s2] > (dist[s1] + d_s1s2) ) {
+		dist[s2] = dist[s1] + d_s1s2;
+		pred[s2] = s1;
+	}
+}
+
+void Dijkstra::compute( const sf::Vector2i& start ){
+	using namespace sf;
 	g.clear();
 	int maxCellW = Game::W / Entity::stride + 1;
 	int maxCellH = Game::H / Entity::stride + 1;
@@ -78,4 +133,28 @@ void Dijkstra::compute(){
 			if(!isColliding(x,y))
 				g[sf::Vector2i(x, y)] = true;
 		}
+	queue.clear();
+	dist.clear();
+	pred.clear();
+	init(start);
+	while( !queue.empty()){
+		std::optional<sf::Vector2i> s1 = find_min(queue);
+		if (s1 == std::nullopt) 
+			break;
+
+		auto pos = std::find(queue.begin(), queue.end(),*s1);
+		queue.erase(pos);
+		sf::Vector2i dirs[] = {
+			sf::Vector2i(0,1),
+			sf::Vector2i(0,-1),
+			sf::Vector2i(-1,0),
+			sf::Vector2i(1,0),
+		};
+		for( int  i = 0; i < 4;++i){
+			sf::Vector2i neighbor = *s1 + dirs[i];
+			if(g.find(neighbor) != g.end())
+				relax(*s1,neighbor);
+		}
+	}
+	int here = 0;
 }

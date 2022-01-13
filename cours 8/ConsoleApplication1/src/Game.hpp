@@ -3,6 +3,7 @@
 #include "Entity.hpp"
 #include <algorithm>
 #include <unordered_map>
+#include <optional>
 
 namespace std {
 	template <>
@@ -18,10 +19,14 @@ namespace std {
 
 class Dijkstra{
 public:
-	std::unordered_map<sf::Vector2i, bool>		g;
-	std::unordered_map<sf::Vector2i, float>		dist;
-
-	void										compute();
+	std::unordered_map<sf::Vector2i, bool>			g;
+	std::unordered_map<sf::Vector2i, float>			dist;
+	std::unordered_map<sf::Vector2i, sf::Vector2i>	pred;
+	std::vector<sf::Vector2i>						queue;
+	std::optional<sf::Vector2i>						find_min(std::vector<sf::Vector2i>& q);
+	void											relax(sf::Vector2i& s1, sf::Vector2i& s2);
+	void											init(const sf::Vector2i& start);
+	void											compute(const sf::Vector2i& start);
 };
 
 class Game {
