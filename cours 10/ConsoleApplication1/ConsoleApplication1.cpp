@@ -16,6 +16,9 @@
 
 #include "imgui.h"
 
+#include "HotReloadShader.hpp"
+
+
 #include "Tool.hpp"
 
 #include "Curve.hpp"
@@ -34,6 +37,7 @@ float clamp(float val, float a, float b) {
 
 sf::Shader g_MainShaderNoTex;
 sf::Shader g_MainShaderTex;
+HotReloadShader g_bgShader;
 
 bool loadFile(const char* path, std::string& res) {
 	FILE* f = 0;
@@ -83,19 +87,26 @@ int main(){
 	fragContent = "#define HAS_UNIFORM_COLOR \\n" + fragContent;
 
 	{
-		if (!g_MainShaderTex.loadFromMemory(vertContent.c_str(), (std::string("#define HAS_TEXTURE \\n") + fragContent).c_str())) {
+		cout << "loading g_MainShaderTex\n";
+		string frag;
+		bool fragOk = loadFile("res/trans.frag", frag);
+		
+		if (!g_MainShaderTex.loadFromMemory(vertContent.c_str(), frag.c_str())) {
 			cout << "cannot load shaders with tex\n";
 			return 1;
 		}
 	}
 	{
+		cout << "loading g_MainShaderNoTex\n";
 		if (!g_MainShaderNoTex.loadFromMemory(vertContent.c_str(), fragContent.c_str())) {
 			cout << "cannot load shaders without tex\n";
 			return 1;
 		}
 	}
 
-	
+	g_bgShader.vtxPath = "res/bg.vert";
+	g_bgShader.fragPath = "res/bg.frag";
+	g_bgShader.eval();
 
 	sf::Font fArial;
 	if (!fArial.loadFromFile("res/arial.ttf"))	
@@ -217,10 +228,46 @@ int main(){
 		//UPDATE
 		auto dtms = ((int)(dt * 1000.0));
 		auto ms = sf::milliseconds(dtms==0?1:dtms);
+
+		static sf::Glsl::Vec4 colAdd = sf::Glsl::Vec4(0,0,0,0);
+		static sf::Glsl::Vec4 colMul = sf::Glsl::Vec4(1, 1, 1, 1);
+
+		float id[] = {
+			1,0,0,0,
+			0,1,0,0,
+			0,0,1,0,
+			0,0,0,1,
+		};
+		static sf::Glsl::Mat4 colTrans = sf::Glsl::Mat4(
+			id
+		);
+
+
 		ImGui::SFML::Update(window, ms);
 
 		Game::im();
 
+		if (ImGui::Begin("Shader", 0)) {
+			if (ImGui::TreeNode("Add")) {
+				ImGui::ColorEdit4("colAdd", &colAdd.x);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("Mul")) {
+				ImGui::ColorEdit4("colMul", &colMul.x);
+				ImGui::TreePop();
+			}
+
+			if (ImGui::TreeNode("Trans")) {
+				ImGui::ColorEdit4("r", &colTrans.array[0]);
+				ImGui::ColorEdit4("g", &colTrans.array[4]);
+				ImGui::ColorEdit4("b", &colTrans.array[8]);
+				ImGui::ColorEdit4("a", &colTrans.array[12]);
+				ImGui::TreePop();
+			}
+		}
+		ImGui::End();
+
+		g_bgShader.update(dt);
 		Game::update(dt);
 		Game::parts.update(dt);
 
@@ -232,10 +279,17 @@ int main(){
 		rectBg.setTexture(&bg);
 		rectBg.setSize(sf::Vector2f(1280, 720));
 		auto v = sf::Glsl::Vec4(1.0f, 1.0f, 1.0f, 1.0f);
-		g_MainShaderTex.setUniform("col",v);
-		sf::RenderStates rs;
-		rs.shader = &g_MainShaderTex;
-		window.draw(rectBg,rs);
+
+		{
+			auto& sh = g_bgShader.sh;
+			sh.setUniform("col", v);
+			sh.setUniform("colAdd", colAdd);
+			sh.setUniform("colMul", colMul);
+			sh.setUniform("colTrans", colTrans);
+			sf::RenderStates rs;
+			rs.shader = &sh;
+			window.draw(rectBg, rs);
+		}
 
 		Game::parts.draw(window);
 		Game::render(window);

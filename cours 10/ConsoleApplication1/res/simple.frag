@@ -21,8 +21,8 @@ void main()
 	#ifdef HAS_UNIFORM_COLOR
 	pixel *= col;
 	#endif
-
+	
     // et multiplication avec la couleur pour obtenir le pixel final
     gl_FragColor = gl_Color * pixel;
-	//gl_FragColor = vec4(1,0,1,1);
+
 }

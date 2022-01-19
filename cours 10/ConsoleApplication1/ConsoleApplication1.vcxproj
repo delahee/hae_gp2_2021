@@ -162,6 +162,7 @@
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\HotReloadShader.cpp" />
     <ClCompile Include="src\Particle.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +181,7 @@
     <ClInclude Include="src\Curve.hpp" />
     <ClInclude Include="src\Entity.hpp" />
     <ClInclude Include="src\Game.hpp" />
+    <ClInclude Include="src\HotReloadShader.hpp" />
     <ClInclude Include="src\Particle.hpp" />
     <ClInclude Include="src\Tool.hpp" />
     <ClInclude Include="Tool.hpp" />
