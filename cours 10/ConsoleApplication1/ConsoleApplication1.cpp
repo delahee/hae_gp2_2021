@@ -286,6 +286,7 @@ int main(){
 			sh.setUniform("colAdd", colAdd);
 			sh.setUniform("colMul", colMul);
 			sh.setUniform("colTrans", colTrans);
+			sh.setUniform("time",(float) timer);
 			sf::RenderStates rs;
 			rs.shader = &sh;
 			window.draw(rectBg, rs);
@@ -295,13 +296,7 @@ int main(){
 		Game::render(window);
 		window.draw(tDt);
 		
-		/*
-		if (Game::shake > 0)
-			window.setPosition(winPos + sf::Vector2i(0 + rand() % 5, 0 + rand() % 5));
-		else
-			window.setPosition(winPos);
-		Game::shake--;
-		*/
+		
 		ImGui::SFML::Render(window);
 		window.display();
 		tExitFrame = getTimeStamp();
