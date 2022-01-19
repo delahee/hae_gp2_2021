@@ -3,28 +3,32 @@ uniform vec4 		col;
 uniform vec4 		colAdd;
 uniform vec4 		colMul;
 uniform mat4 		colTrans;
-uniform float time;
+uniform float 		time;
+
+vec4 blur9(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
+  vec4 color = vec4(0.0);
+  vec2 off1 = vec2(1.3846153846) * direction;
+  vec2 off2 = vec2(3.2307692308) * direction;
+  color += texture2D(image, uv) * 0.2270270270;
+  color += texture2D(image, uv + (off1 / resolution)) * 0.3162162162;
+  color += texture2D(image, uv - (off1 / resolution)) * 0.3162162162;
+  color += texture2D(image, uv + (off2 / resolution)) * 0.0702702703;
+  color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;
+  return color;
+}
+
 void main()
 {
     // recup le pixel dans la texture
-	vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
+	//vec4 pixel = texture2D(texture, gl_TexCoord[0].xy);
+	vec2 resolution = vec2(1024,1024);
 	
-	//on connait les UV 
-	// essayer de faire appliquer la coloration a une ligne sur 2 ou sur une plage
+	float xscale = 2.0;
+	float yscale = 2.0;
 	
-	if( ( mod(gl_TexCoord[0].y , 0.2)) > 0.1 ){
-		vec2 uvFinal = gl_TexCoord[0].xy;
-		uvFinal.x += 0.2 * (mod(time*0.3,0.2));
-		pixel = texture2D(texture, uvFinal);
-		pixel.g = 0.0;
-	}
-	//pixel = vec4( gl_TexCoord[0].x,gl_TexCoord[0].y,0,1); 
+	vec4 pixel = blur9( texture,gl_TexCoord[0].xy, resolution, vec2(xscale,0));
 	
-	pixel *= col;
-	
-	pixel += colAdd;
-	pixel *= colMul;
-	pixel = colTrans * pixel;
+	pixel =  0.5 * (pixel ) + 0.5 * blur9( texture,gl_TexCoord[0].xy, resolution, vec2(0,yscale));
 	
     // et multiplication avec la couleur pour obtenir le pixel final
     gl_FragColor = gl_Color * pixel;
